@@ -1,51 +1,41 @@
+import 'package:ecommer_app/bloc/shopping_cart_bloc.dart';
 import 'package:ecommer_app/model/cart.dart';
-import 'package:ecommer_app/model/dinkinfo.dart';
-import 'package:ecommer_app/model/drink.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CartItemWidget extends StatelessWidget {
-  const CartItemWidget({Key? key}) : super(key: key);
+  final Cart cart;
+  const CartItemWidget(this.cart, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context);
-    final cartItem = Provider.of<Drink>(context);
-    final drinks = Provider.of<Drinks>(context);
-    return SizedBox(
-      height: 100,
-      child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: ListTile(
-            leading: Image.network(cartItem.imageUrl),
-            title: Text(cartItem.title),
-            subtitle: Text('${cartItem.price * cartItem.quantity}'),
-            trailing: SizedBox(
-              width: 120,
-              child: Row(
-                children: <Widget>[
-                  SizedBox(
-                      child: IconButton(
-                          onPressed: () {
-                            if (cartItem.quantity == 1) {
-                              cart.removeItem(cartItem.id);
-                              drinks.removeItem(cartItem.id);
-                            } else {
-                              cart.less(cartItem.id);
-                            }
-                          },
-                          icon: const Icon(Icons.horizontal_rule_outlined))),
-                  Text('${cartItem.quantity}'),
-                  SizedBox(
-                      child: IconButton(
-                          onPressed: () {
-                            cart.addAmount(cartItem.id);
-                          },
-                          icon: const Icon(Icons.add))),
-                ],
-              ),
-            ),
-          )),
-    );
+    return Card(
+        elevation: 4,
+        margin: const EdgeInsets.only(top: 6, left: 6, right: 6),
+        child: ListTile(
+          leading: Image.network(cart.drink.imageUrl),
+          title: Text(cart.drink.title),
+          subtitle: Text('${cart.drink.price * cart.quantity} vnd'),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    BlocProvider.of<ShoppingCartBloc>(context, listen: false)
+                        .add(RemoveFromCartEvent(cart.drink.id));
+                    //Listen event RemoveFromCartEvent
+                  },
+                  icon: const Icon(Icons.remove_rounded)),
+              Text('${cart.quantity}'),
+              IconButton(
+                  onPressed: () {
+                    BlocProvider.of<ShoppingCartBloc>(context, listen: false)
+                        .add(AddToCartEvent(cart.drink.id));
+                    //Listen event AddToCartEvent
+                  },
+                  icon: const Icon(Icons.add_rounded)),
+            ],
+          ),
+        ));
   }
 }

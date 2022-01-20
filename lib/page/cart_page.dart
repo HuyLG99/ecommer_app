@@ -22,6 +22,7 @@ class CartPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const MainHome()));
             },
           ),
+<<<<<<< Updated upstream
           title: const Center(child: Text("Cart")),
         ),
         body: Column(
@@ -64,6 +65,32 @@ class CartPage extends StatelessWidget {
               ),
             )
           ],
+=======
+          title: const Padding(
+            padding: EdgeInsets.only(left: 110.0),
+            child: Text("Cart"),
+          ),
+        ),
+        //Body listen Bloc have list cart
+        //Mangage state change
+        body: BlocBuilder<ShoppingCartBloc, List<Cart>>(
+          builder: (context, state) => ListView.builder(
+            itemBuilder: (context, index) {
+              return CartItemWidget(cartBloc.state[index]);
+            },
+            padding: const EdgeInsets.only(bottom: 100),
+            itemCount: cartBloc.state.length,
+          ),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => cartBloc.add(
+              const CheckOutEvent()), //checkout event from ShoppingCartBloc
+          label: BlocBuilder<ShoppingCartBloc, List<Cart>>(
+            //Bloc get total from cart in this cart
+            builder: (context, state) => Text('${cartBloc.getTotalAmount()}'),
+          ),
+          icon: const Icon(Icons.monetization_on_sharp),
+>>>>>>> Stashed changes
         ));
   }
 }

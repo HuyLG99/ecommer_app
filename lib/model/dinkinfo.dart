@@ -1,8 +1,7 @@
 import 'package:ecommer_app/model/drink.dart';
-import 'package:flutter/material.dart';
 
-class Drinks extends ChangeNotifier {
-  final List<Drink> _drinks = [
+class Drinks {
+  static final List<Drink> drinks = [
     Drink(
         id: 'd1',
         title: 'Bạc Sỉu Đá',
@@ -94,15 +93,4 @@ class Drinks extends ChangeNotifier {
         imageUrl:
             'https://product.hstatic.net/1000075078/product/caramel-macchiato-da_fa2503073e5c4f7a98516f1c9d39253b_large.jpg'),
   ];
-
-  List<Drink> get drinks {
-    return [..._drinks];
-  }
-
-  void removeItem(String id) {
-    for (var element in _drinks) {
-      if (element.id == id) element.isChoose = false;
-    }
-    notifyListeners();
-  }
 }
